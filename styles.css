@@ -31,6 +31,14 @@ body {
     min-height: 100vh;
 }
 
+/* Light theme overrides using CSS variables */
+.light-theme {
+    --primary-color: #e9ecef;
+    --dark-color: #ffffff;
+    --light-color: #111111;
+    --text-color: #111111;
+}
+
 .container {
     width: 90%;
     max-width: 1200px;
@@ -382,6 +390,37 @@ footer p {
     font-size: 0.9rem;
 }
 
+/* Theme toggle button (no inline styles) */
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    z-index: 999;
+    font-weight: 700;
+    background-color: var(--secondary-color);
+    color: #fff;
+    box-shadow: var(--card-shadow);
+}
+
+.api-key-btn {
+    position: fixed;
+    top: 20px;
+    right: 140px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    z-index: 999;
+    font-weight: 700;
+    background-color: #6c5ce7;
+    color: #fff;
+    box-shadow: var(--card-shadow);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     header h1 {
@@ -442,6 +481,17 @@ footer p {
 
 .movie-card {
     animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Light theme component tweaks */
+.light-theme .movie-card {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.light-theme .movie-rating,
+.light-theme .movie-rating i {
+    color: #1a1a1a;
 }
 
 .movies-container .movie-card:nth-child(1) { animation-delay: 0.1s; }

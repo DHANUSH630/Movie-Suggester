@@ -1,6 +1,6 @@
 
-// OMDB API Key
-const apiKey = "3e974fca"; // Using a valid OMDB API key
+// OMDB API Key (stored in localStorage if provided by user)
+let apiKey = localStorage.getItem('omdbApiKey') || "3e974fca";
 
 // Sample movie data from OMDB API (for initial display)
 const sampleMovieData = {
@@ -185,7 +185,7 @@ function displayMovie(movie) {
 // Truncate text
 function truncateText(text, maxLength) {
     if (text.length <= maxLength) return text;
-    return text.substr(0, maxLength) + '...';
+    return text.slice(0, maxLength) + '...';
 }
 
 // Initialize with default genre
@@ -198,41 +198,52 @@ window.addEventListener('DOMContentLoaded', () => {
         filterMovies('action');
     }
     setupThemeToggle();
+    setupApiKeyControl();
 });
 
-// 🌙 Dark Mode Toggle
+// 🌗 Theme Toggle (class-based, no inline styles)
 function setupThemeToggle() {
     const toggleButton = document.createElement('button');
     toggleButton.id = 'themeToggle';
-    toggleButton.textContent = '🌙 Dark Mode';
-    toggleButton.style.position = 'fixed';
-    toggleButton.style.top = '20px';
-    toggleButton.style.right = '20px';
-    toggleButton.style.padding = '10px 15px';
-    toggleButton.style.borderRadius = '20px';
-    toggleButton.style.border = 'none';
-    toggleButton.style.cursor = 'pointer';
-    toggleButton.style.zIndex = '999';
-    toggleButton.style.fontWeight = 'bold';
-    toggleButton.style.backgroundColor = '#01b4e4';
-    toggleButton.style.color = '#fff';
+    toggleButton.className = 'theme-toggle';
+
+    const savedTheme = localStorage.getItem('theme');
+    const isLight = savedTheme === 'light';
+    document.body.classList.toggle('light-theme', isLight);
+    toggleButton.textContent = isLight ? '🌙 Dark Mode' : '☀️ Light Mode';
+
     document.body.appendChild(toggleButton);
 
-    // Restore saved theme
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-theme');
-        toggleButton.textContent = '☀️ Light Mode';
-        document.body.style.backgroundColor = '#0a1929';
-        document.body.style.color = '#f0f0f0';
-    }
-
-    // On click
     toggleButton.addEventListener('click', () => {
-        document.body.classList.toggle('dark-theme');
-        const isDark = document.body.classList.contains('dark-theme');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        toggleButton.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
-        document.body.style.backgroundColor = isDark ? '#0a1929' : '#ffffff';
-        document.body.style.color = isDark ? '#f0f0f0' : '#000000';
+        const nowLight = !document.body.classList.contains('light-theme');
+        document.body.classList.toggle('light-theme', nowLight);
+        localStorage.setItem('theme', nowLight ? 'light' : 'dark');
+        toggleButton.textContent = nowLight ? '🌙 Dark Mode' : '☀️ Light Mode';
     });
+}
+
+// 🔑 API key control (stores in localStorage)
+function setupApiKeyControl() {
+    const apiButton = document.createElement('button');
+    apiButton.id = 'apiKeyButton';
+    apiButton.className = 'api-key-btn';
+    apiButton.textContent = '🔑 API Key';
+
+    apiButton.addEventListener('click', () => {
+        const current = localStorage.getItem('omdbApiKey') || '';
+        const entered = window.prompt('Enter OMDB API key (leave blank to clear)', current);
+        if (entered === null) return; // cancelled
+        const trimmed = entered.trim();
+        if (trimmed.length === 0) {
+            localStorage.removeItem('omdbApiKey');
+            apiKey = "3e974fca";
+            if (selectionMessage) selectionMessage.textContent = 'Using default OMDB API key.';
+        } else {
+            localStorage.setItem('omdbApiKey', trimmed);
+            apiKey = trimmed;
+            if (selectionMessage) selectionMessage.textContent = 'OMDB API key saved.';
+        }
+    });
+
+    document.body.appendChild(apiButton);
 }
