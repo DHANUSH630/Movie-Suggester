@@ -1,63 +1,6 @@
 
-// OMDB API Key
-const apiKey = "3e974fca"; // Using a valid OMDB API key
-
-// Sample movie data from OMDB API (for initial display)
-const sampleMovieData = {
-    "Title": "Guardians of the Galaxy Vol. 2",
-    "Year": "2017",
-    "Rated": "PG-13",
-    "Released": "05 May 2017",
-    "Runtime": "136 min",
-    "Genre": "Action, Adventure, Comedy",
-    "Director": "James Gunn",
-    "Writer": "James Gunn, Dan Abnett, Andy Lanning",
-    "Actors": "Chris Pratt, Zoe Saldaña, Dave Bautista",
-    "Plot": "The Guardians struggle to keep together as a team while dealing with their personal family issues, notably Star-Lord's encounter with his father, the ambitious celestial being Ego.",
-    "Language": "English",
-    "Country": "United States",
-    "Awards": "Nominated for 1 Oscar. 15 wins & 60 nominations total",
-    "Poster": "https://m.media-amazon.com/images/M/MV5BNWE5MGI3MDctMmU5Ni00YzI2LWEzMTQtZGIyZDA5MzQzNDBhXkEyXkFqcGc@._V1_SX300.jpg",
-    "Ratings": [
-        { "Source": "Internet Movie Database", "Value": "7.6/10" },
-        { "Source": "Rotten Tomatoes", "Value": "85%" },
-        { "Source": "Metacritic", "Value": "67/100" }
-    ],
-    "Metascore": "67",
-    "imdbRating": "7.6",
-    "imdbVotes": "806,353",
-    "imdbID": "tt3896198",
-    "Type": "movie",
-    "BoxOffice": "$389,813,101",
-    "Response": "True"
-};
-
-// Movie Database
+// RapidAPI-backed UI: fetch movies by selected genre from server
 let movies = [];
-
-// Predefined movie lists by genre
-const moviesByGenre = {
-    action: ["The Dark Knight", "Mad Max: Fury Road", "John Wick", "Die Hard", "The Avengers", "Mission Impossible"],
-    comedy: ["Superbad", "The Hangover", "Bridesmaids", "Anchorman", "Step Brothers", "Dumb and Dumber"],
-    drama: ["The Shawshank Redemption", "The Godfather", "Schindler's List", "Forrest Gump", "The Green Mile", "Titanic"],
-    horror: ["The Shining", "Hereditary", "Get Out", "The Conjuring", "A Quiet Place", "It"],
-    "sci-fi": ["Inception", "Interstellar", "Blade Runner 2049", "The Matrix", "Arrival", "Dune"],
-    romance: ["The Notebook", "Pride & Prejudice", "La La Land", "Before Sunrise", "Eternal Sunshine of the Spotless Mind", "Silver Linings Playbook"],
-    thriller: ["Parasite", "Gone Girl", "Prisoners", "Se7en", "Silence of the Lambs", "Shutter Island"],
-    animation: ["Spirited Away", "Toy Story", "Spider-Man: Into the Spider-Verse", "Up", "The Lion King", "Finding Nemo"],
-    telugu: ["Baahubali: The Beginning", "RRR", "Arjun Reddy", "Pushpa", "Magadheera", "Eega"]
-};
-
-// Add sample movie
-movies.push({
-    id: 1,
-    title: sampleMovieData.Title,
-    year: parseInt(sampleMovieData.Year),
-    genre: "action",
-    rating: parseFloat(sampleMovieData.imdbRating),
-    description: sampleMovieData.Plot,
-    poster: sampleMovieData.Poster
-});
 
 // DOM elements
 const genreButtons = document.querySelectorAll('.genre-btn');
@@ -86,15 +29,11 @@ function filterMovies(genre) {
 // Fetch movies by genre
 async function fetchMoviesByGenre(genre) {
     try {
-        const moviesToFetch = moviesByGenre[genre] || [];
-        if (moviesToFetch.length === 0) {
-            selectionMessage.textContent = `No movies for ${genre}`;
-            return;
-        }
         selectionMessage.textContent = `Fetching ${genre} movies...`;
-        const fetchPromises = moviesToFetch.map(title => fetchMovieByTitle(title, genre));
-        const fetchedMovies = await Promise.all(fetchPromises);
-        const validMovies = fetchedMovies.filter(movie => movie !== null);
+        const response = await fetch(`/api/movies?genre=${encodeURIComponent(genre)}&limit=12`);
+        if (!response.ok) throw new Error('Network error');
+        const data = await response.json();
+        const validMovies = Array.isArray(data.movies) ? data.movies : [];
         movies = [...movies, ...validMovies];
         displayMovies(validMovies, genre);
     } catch (error) {
@@ -103,44 +42,7 @@ async function fetchMoviesByGenre(genre) {
     }
 }
 
-// Fetch movie by title
-async function fetchMovieByTitle(title, genre) {
-    try {
-        const response = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${apiKey}`);
-        const data = await response.json();
-        if (data.Response === "True") {
-            return {
-                id: Date.now() + Math.floor(Math.random() * 1000),
-                title: data.Title,
-                year: parseInt(data.Year) || 0,
-                genre: genre,
-                rating: parseFloat(data.imdbRating) || 0,
-                description: data.Plot || `No description available`,
-                poster: data.Poster !== "N/A" ? data.Poster : `https://via.placeholder.com/300x450?text=${encodeURIComponent(title)}`
-            };
-        } else {
-            return {
-                id: movies.length + 1,
-                title: title,
-                year: 0,
-                genre: genre,
-                rating: 0,
-                description: `No information available for ${title}`,
-                poster: `https://via.placeholder.com/300x450?text=${encodeURIComponent(title)}`
-            };
-        }
-    } catch (error) {
-        return {
-            id: movies.length + 1,
-            title: title,
-            year: 0,
-            genre: genre,
-            rating: 0,
-            description: `Error loading ${title}`,
-            poster: `https://via.placeholder.com/300x450?text=Error+Loading`
-        };
-    }
-}
+// Remove OMDB single-title fetch; we now use our server API
 
 // Display movies
 function displayMovies(moviesToDisplay, genre) {
