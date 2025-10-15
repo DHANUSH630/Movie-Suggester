@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommender</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-film"></i> Movie Recommender</h1>
+            <p>Find your next favorite movie based on genre</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="genre-selection">
+            <h2>Select a Genre</h2>
+            <div class="genre-buttons">
+                <button class="genre-btn" data-genre="action">Action</button>
+                <button class="genre-btn" data-genre="comedy">Comedy</button>
+                <button class="genre-btn" data-genre="drama">Drama</button>
+                <button class="genre-btn" data-genre="horror">Horror</button>
+                <button class="genre-btn" data-genre="sci-fi">Sci-Fi</button>
+                <button class="genre-btn" data-genre="romance">Romance</button>
+                <button class="genre-btn" data-genre="thriller">Thriller</button>
+                <button class="genre-btn" data-genre="animation">Animation</button>
+            </div>
+        </section>
+
+        <section class="results">
+            <h2>Recommended Movies</h2>
+            <p class="selection-message">Please select a genre to see recommendations</p>
+            <div class="movies-container" id="moviesContainer">
+                <!-- Movies will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Movie Recommender | Created with HTML, CSS & JavaScript</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
