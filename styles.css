@@ -22,6 +22,12 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Always allow vertical scrolling when content overflows */
+html, body {
+    overflow-y: auto;
+    height: 100%;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, var(--dark-color) 0%, var(--primary-color) 100%);
@@ -29,6 +35,17 @@ body {
     color: var(--light-color);
     line-height: 1.6;
     min-height: 100vh;
+}
+
+/* Ensure forced dark theme styles when .dark-theme is present on body */
+.dark-theme {
+    --primary-color: #032541;
+    --secondary-color: #01b4e4;
+    --accent-color: #f5c518;
+    --dark-color: #0a1929;
+    --light-color: #f0f0f0;
+    background: linear-gradient(135deg, var(--dark-color) 0%, var(--primary-color) 100%);
+    color: var(--light-color) !important;
 }
 
 .container {

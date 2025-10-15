@@ -37,15 +37,42 @@ let movies = [];
 
 // Predefined movie lists by genre
 const moviesByGenre = {
-    action: ["The Dark Knight", "Mad Max: Fury Road", "John Wick", "Die Hard", "The Avengers", "Mission Impossible"],
-    comedy: ["Superbad", "The Hangover", "Bridesmaids", "Anchorman", "Step Brothers", "Dumb and Dumber"],
-    drama: ["The Shawshank Redemption", "The Godfather", "Schindler's List", "Forrest Gump", "The Green Mile", "Titanic"],
-    horror: ["The Shining", "Hereditary", "Get Out", "The Conjuring", "A Quiet Place", "It"],
-    "sci-fi": ["Inception", "Interstellar", "Blade Runner 2049", "The Matrix", "Arrival", "Dune"],
-    romance: ["The Notebook", "Pride & Prejudice", "La La Land", "Before Sunrise", "Eternal Sunshine of the Spotless Mind", "Silver Linings Playbook"],
-    thriller: ["Parasite", "Gone Girl", "Prisoners", "Se7en", "Silence of the Lambs", "Shutter Island"],
-    animation: ["Spirited Away", "Toy Story", "Spider-Man: Into the Spider-Verse", "Up", "The Lion King", "Finding Nemo"],
-    telugu: ["Baahubali: The Beginning", "RRR", "Arjun Reddy", "Pushpa", "Magadheera", "Eega"]
+    action: [
+        "The Dark Knight", "Mad Max: Fury Road", "John Wick", "Die Hard", "The Avengers", "Mission: Impossible - Fallout",
+        "Terminator 2: Judgment Day", "Gladiator", "The Bourne Identity", "Casino Royale", "The Raid", "Logan", "Kill Bill: Vol. 1", "Heat"
+    ],
+    comedy: [
+        "Superbad", "The Hangover", "Bridesmaids", "Anchorman", "Step Brothers", "Dumb and Dumber",
+        "Groundhog Day", "Monty Python and the Holy Grail", "Hot Fuzz", "Shaun of the Dead", "Tropic Thunder", "Mean Girls", "The Big Lebowski"
+    ],
+    drama: [
+        "The Shawshank Redemption", "The Godfather", "Schindler's List", "Forrest Gump", "The Green Mile", "Titanic",
+        "Fight Club", "Good Will Hunting", "A Beautiful Mind", "The Social Network", "Moonlight", "Spotlight"
+    ],
+    horror: [
+        "The Shining", "Hereditary", "Get Out", "The Conjuring", "A Quiet Place", "It",
+        "The Exorcist", "Alien", "The Babadook", "The Ring", "Halloween", "Scream"
+    ],
+    "sci-fi": [
+        "Inception", "Interstellar", "Blade Runner 2049", "The Matrix", "Arrival", "Dune",
+        "Ex Machina", "2001: A Space Odyssey", "Minority Report", "Edge of Tomorrow", "The Fifth Element", "Moon"
+    ],
+    romance: [
+        "The Notebook", "Pride & Prejudice", "La La Land", "Before Sunrise", "Eternal Sunshine of the Spotless Mind", "Silver Linings Playbook",
+        "Casablanca", "Roman Holiday", "Amélie", "500 Days of Summer", "The Fault in Our Stars"
+    ],
+    thriller: [
+        "Parasite", "Gone Girl", "Prisoners", "Se7en", "The Silence of the Lambs", "Shutter Island",
+        "Zodiac", "No Country for Old Men", "Oldboy", "Nightcrawler", "The Girl with the Dragon Tattoo"
+    ],
+    animation: [
+        "Spirited Away", "Toy Story", "Spider-Man: Into the Spider-Verse", "Up", "The Lion King", "Finding Nemo",
+        "WALL-E", "Coco", "Inside Out", "How to Train Your Dragon", "Kiki's Delivery Service"
+    ],
+    telugu: [
+        "Baahubali: The Beginning", "RRR", "Arjun Reddy", "Pushpa", "Magadheera", "Eega",
+        "Ala Vaikunthapurramuloo", "Mahanati", "Srimanthudu", "DJ: Duvvada Jagannadham", "Agent Sai Srinivasa Athreya", "Sye"
+    ]
 };
 
 // Add sample movie
@@ -197,42 +224,14 @@ window.addEventListener('DOMContentLoaded', () => {
         movies = [];
         filterMovies('action');
     }
-    setupThemeToggle();
+    // Force dark theme only (remove toggle)
+    document.body.classList.add('dark-theme');
+    // Apply inline body background and text color matching dark mode used previously
+    document.body.style.backgroundColor = '#0a1929';
+    document.body.style.color = '#f0f0f0';
 });
 
 // 🌙 Dark Mode Toggle
 function setupThemeToggle() {
-    const toggleButton = document.createElement('button');
-    toggleButton.id = 'themeToggle';
-    toggleButton.textContent = '🌙 Dark Mode';
-    toggleButton.style.position = 'fixed';
-    toggleButton.style.top = '20px';
-    toggleButton.style.right = '20px';
-    toggleButton.style.padding = '10px 15px';
-    toggleButton.style.borderRadius = '20px';
-    toggleButton.style.border = 'none';
-    toggleButton.style.cursor = 'pointer';
-    toggleButton.style.zIndex = '999';
-    toggleButton.style.fontWeight = 'bold';
-    toggleButton.style.backgroundColor = '#01b4e4';
-    toggleButton.style.color = '#fff';
-    document.body.appendChild(toggleButton);
-
-    // Restore saved theme
-    if (localStorage.getItem('theme') === 'dark') {
-        document.body.classList.add('dark-theme');
-        toggleButton.textContent = '☀️ Light Mode';
-        document.body.style.backgroundColor = '#0a1929';
-        document.body.style.color = '#f0f0f0';
-    }
-
-    // On click
-    toggleButton.addEventListener('click', () => {
-        document.body.classList.toggle('dark-theme');
-        const isDark = document.body.classList.contains('dark-theme');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        toggleButton.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
-        document.body.style.backgroundColor = isDark ? '#0a1929' : '#ffffff';
-        document.body.style.color = isDark ? '#f0f0f0' : '#000000';
-    });
+    // Theme toggle removed per request. This function is intentionally left empty.
 }
