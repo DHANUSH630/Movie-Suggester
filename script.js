@@ -90,14 +90,77 @@ movies.push({
 const genreButtons = document.querySelectorAll('.genre-btn');
 const moviesContainer = document.getElementById('moviesContainer');
 const selectionMessage = document.querySelector('.selection-message');
+const search = document.getElementById('search');
+let timeOut;
+search.addEventListener('input', (e) => {
+    const query = e.target.value;
+    clearTimeout(timeOut);
+    timeOut = setTimeout(async () => {
+        if (query.length > 0) {
+            moviesContainer.innerHTML = '';
+            selectionMessage.textContent = `Searching for: ${query}...`;
+            const movie = await fetchTitle(query);
+            if (movie.Response === "True" || movie.year !== 0) {
+                displayMovie(movie);
+                selectionMessage.textContent = `Showing result for: ${movie.title}`;
+            } else {
 
+                selectionMessage.textContent = `No exact match found for "${query}"`;
+                displayMovie(movie);
+            }
+        } else {
+            selectionMessage.textContent = `No movies for ${query}`;
+            return;
+        }
+    }, 300)
+})
+async function fetchTitle(title) {
+    try {
+        const response = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(title)}&apikey=${apiKey}`);
+        const data = await response.json();
+        if (data.Response === "True") {
+            return {
+                id: Date.now() + Math.floor(Math.random() * 1000),
+                title: data.Title,
+                year: parseInt(data.Year) || 0,
+                genre: data.genre,
+                rating: parseFloat(data.imdbRating) || 0,
+                description: data.Plot || `No description available`,
+                poster: data.Poster !== "N/A" ? data.Poster : `https://via.placeholder.com/300x450?text=${encodeURIComponent(title)}`
+            };
+        } else {
+            return {
+                id: movies.length + 1,
+                title: title,
+                year: 0,
+                genre: 'genre',
+                rating: 0,
+                description: `No information available for ${title}`,
+                poster: `https://via.placeholder.com/300x450?text=${encodeURIComponent(title)}`
+            };
+        }
+    } catch (error) {
+        return {
+            id: movies.length + 1,
+            title: title,
+            year: 0,
+            genre: 'genre',
+            rating: 0,
+            description: `Error loading ${title}`,
+            poster: `https://via.placeholder.com/300x450?text=Error+Loading`
+        };
+    }
+}
 // Genre button click events
 genreButtons.forEach(button => {
     button.addEventListener('click', () => {
         genreButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
+
+
         const selectedGenre = button.getAttribute('data-genre');
         filterMovies(selectedGenre);
+
     });
 });
 
