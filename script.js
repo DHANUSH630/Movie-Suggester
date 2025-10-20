@@ -272,13 +272,13 @@ function displayMovie(movie) {
     moviesContainer.appendChild(movieCard);
 }
 
-// Truncate text
+
 function truncateText(text, maxLength) {
     if (text.length <= maxLength) return text;
     return text.substr(0, maxLength) + '...';
 }
 
-// Initialize with default genre
+
 window.addEventListener('DOMContentLoaded', () => {
     const actionButton = document.querySelector('.genre-btn[data-genre="action"]');
     if (actionButton) {
@@ -287,14 +287,12 @@ window.addEventListener('DOMContentLoaded', () => {
         movies = [];
         filterMovies('action');
     }
-    // Force dark theme only (remove toggle)
+
     document.body.classList.add('dark-theme');
-    // Apply inline body background and text color matching dark mode used previously
+
     document.body.style.backgroundColor = '#0a1929';
     document.body.style.color = '#f0f0f0';
 });
 
-// 🌙 Dark Mode Toggle
-function setupThemeToggle() {
-    // Theme toggle removed per request. This function is intentionally left empty.
-}
+
+
